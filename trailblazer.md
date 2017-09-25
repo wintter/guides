@@ -6,12 +6,10 @@
 
 > simplifies refactoring
 
-
-
-##### Standart tasks and solution with traiblazer and pure rails application
+### Standart tasks and solution with traiblazer and pure rails application
 
 ### Case 1
-##### GOAL:  Remove all business logic from the model and provide a separate, streamlined object for it.
+##### GOAL: Remove all business logic from the model and provide a separate, streamlined object for it.
 
 Callbacks in models
 
@@ -51,7 +49,7 @@ end
 > of course we can easily run through rails console `Company::Create.({name: 'test'})`
 
 ### Case 2
-##### GOAL:  Remove all business logic from the model and provide a separate, streamlined object for it.
+##### GOAL: Remove all business logic from the model and provide a separate, streamlined object for it.
 
 Validation in model
 
@@ -112,11 +110,16 @@ end
 
 ### Case 3
 
+##### GOAL: Delegate authorization to separate policy class
+
 Authorization examples
 
 ```ruby
 class Company::Create < Trailblazer::Operation
+  step Model( Company, :new )
   step Policy::Pundit(CompanyPolicy, :create?)
+  
+  # ... other code omitted
 end
 
 ```
@@ -130,9 +133,14 @@ end
 ```
 
 > Why it's good?
-> Super clear for developers -> in operation we have step for authorization
+> It's super clear for developers -> in operation we have step for authorization.
+> In pundit policies, it is a convention to have access to those objects at runtime 
+> and build rules on top of those.
 
 ### Case 4
+
+##### GOAL: Remove all business logic from the controller and provide a separate, streamlined object for it.
+
 Business logic in controllers. They end up as lean HTTP endpoints.
 So no business logic is to be found in the controller. 
 
@@ -185,6 +193,9 @@ end
 > We keep controllers super clean and simply run needed operation
 
 ### Case 5
+
+##### GOAL: Add ability to easily test application
+
 Testing
 
 ```ruby
@@ -263,6 +274,9 @@ end
 > you can write simple and fast unit-tests to assert the correct behavior.
 
 ### Case 6
+
+##### GOAL: Provide an object that can render a template.
+
 Business logic in views.
 In pure Rails app we can't easily encapsulate code in view layer. 
 
